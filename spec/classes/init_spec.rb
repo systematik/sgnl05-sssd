@@ -118,6 +118,25 @@ describe 'sssd' do
         },
       },
     },
+    'el9' => {
+      :extra_packages => [
+        'authselect',
+        'oddjob-mkhomedir',
+      ],
+      :manage_oddjobd => true,
+      :facts_hash => {
+        :osfamily => 'RedHat',
+        :operatingsystem => 'RedHat',
+        :operatingsystemmajrelease => '9',
+        :os => {
+          'family' => 'RedHat',
+          'name'   => 'RedHat',
+          'release' => {
+            'major' => '9',
+          },
+        },
+      },
+    },
     'Fedora 30' => {
       :extra_packages => [
         'authselect',
@@ -508,7 +527,7 @@ describe 'sssd' do
           end
         end
 
-        if v[:facts_hash][:os]['name'] == 'RedHat' and v[:facts_hash][:os]['release']['major'] == '8'
+        if v[:facts_hash][:os]['name'] == 'RedHat' and v[:facts_hash][:os]['release']['major'] >= '8'
           it do
             should contain_exec('authselect-mkhomedir').with({
               :command => '/bin/authselect select sssd with-mkhomedir --force',
@@ -668,7 +687,7 @@ describe 'sssd' do
           end
         end
 
-        if v[:facts_hash][:os]['name'] == 'RedHat' and v[:facts_hash][:os]['release']['major'] == '8'
+        if v[:facts_hash][:os]['name'] == 'RedHat' and v[:facts_hash][:os]['release']['major'] >= '8'
           it do
             should contain_exec('authselect-mkhomedir').with({
               :command => '/bin/authselect select sssd --force',
@@ -772,7 +791,7 @@ describe 'sssd' do
           end
         end
 
-        if v[:facts_hash][:os]['name'] == 'RedHat' and v[:facts_hash][:os]['release']['major'] == '8'
+        if v[:facts_hash][:os]['name'] == 'RedHat' and v[:facts_hash][:os]['release']['major'] >= '8'
           it do
             should contain_exec('authselect-mkhomedir').with({
             :command => '/bin/authselect select profile --enable1 --enable2 --force',
@@ -810,7 +829,7 @@ describe 'sssd' do
           end
         end
 
-        if v[:facts_hash][:os]['name'] == 'RedHat' and v[:facts_hash][:os]['release']['major'] == '8'
+        if v[:facts_hash][:os]['name'] == 'RedHat' and v[:facts_hash][:os]['release']['major'] >= '8'
           it do
             should contain_exec('authselect-mkhomedir').with({
             :command => '/bin/authselect select profile --disable1 --disable2 --force',
