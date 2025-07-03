@@ -25,29 +25,35 @@ default_fact_files.each do |f|
   next unless File.exist?(f) && File.readable?(f) && File.size?(f)
 
   begin
-    require 'deep_merge'
-    default_facts.deep_merge!(YAML.safe_load(File.read(f), permitted_classes: [], permitted_symbols: [], aliases: true))
-  rescue StandardError => e
+    default_facts.merge!(YAML.safe_load(File.read(f), [], [], true))
+  rescue => e
     RSpec.configuration.reporter.message "WARNING: Unable to load #{f}: #{e}"
   end
 end
 
 # read default_facts and merge them over what is provided by facterdb
 default_facts.each do |fact, value|
-  add_custom_fact fact, value, merge_facts: true
+  add_custom_fact fact, value
 end
 
 RSpec.configure do |c|
+  c.fail_fast = true
+  c.hiera_config = File.expand_path(File.join(__FILE__, '../fixtures/hiera.yml'))
   c.default_facts = default_facts
   c.before :each do
     # set to strictest setting for testing
     # by default Puppet runs at warning level
     Puppet.settings[:strict] = :warning
     Puppet.settings[:strict_variables] = true
+
+    allow(Puppet::FileSystem).to receive(:exist?).and_call_original
+    allow(Puppet::FileSystem).to receive(:read_preserve_line_endings).and_call_original
+    allow(Puppet::FileSystem).to receive(:exist?).with('/opt/puppetlabs/puppet/VERSION').and_return true
+    allow(Puppet::FileSystem).to receive(:read_preserve_line_endings).with('/opt/puppetlabs/puppet/VERSION').and_return "8.10.0\n"
   end
   c.filter_run_excluding(bolt: true) unless ENV['GEM_BOLT']
   c.after(:suite) do
-    RSpec::Puppet::Coverage.report!(0)
+    RSpec::Puppet::Coverage.report!
   end
 
   # Filter backtrace noise
@@ -71,5 +77,3 @@ def ensure_module_defined(module_name)
     last_module.const_get(next_module, false)
   end
 end
-
-# 'spec_overrides' from sync.yml will appear below this line
