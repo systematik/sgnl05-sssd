@@ -1,438 +1,269 @@
 require 'spec_helper'
 describe 'sssd' do
   platforms = {
-    'amazon_linux2' => {
-      extra_packages: [
-        'authconfig',
-        'oddjob-mkhomedir',
-      ],
+    amazon_linux2: {
+      extra_packages: ['authconfig', 'oddjob-mkhomedir'],
       manage_oddjobd: true,
       facts_hash: {
-        osfamily: 'RedHat',
-        operatingsystem: 'Amazon',
-        operatingsystemmajrelease: '2',
         os: {
-          'family' => 'RedHat',
-          'name'   => 'Amazon',
-          'release' => {
-            'major' => '2',
-          },
+          family: 'RedHat',
+          name: 'Amazon',
+          release: { major: '2' }
         },
-      },
+        networking: { domain: 'example.com' }
+      }
     },
-    'debian8' => {
-      extra_packages: [
-        'libpam-runtime',
-        'libpam-sss',
-        'libnss-sss',
-      ],
+    debian8: {
+      extra_packages: ['libpam-runtime', 'libpam-sss', 'libnss-sss'],
       manage_oddjobd: false,
       facts_hash: {
-        osfamily: 'Debian',
-        operatingsystem: 'Debian',
-        operatingsystemrelease: '8.1',
-        operatingsystemmajrelease: '8',
         os: {
-          'family' => 'Debian',
-          'release' => {
-            'major' => '8',
-          },
+          family: 'Debian',
+          name: 'Debian',
+          release: { major: '8' }
         },
-      },
+        networking: { domain: 'example.com' }
+      }
     },
-    'debian9' => {
-      extra_packages: [
-        'libpam-runtime',
-        'libpam-sss',
-        'libnss-sss',
-      ],
+    debian9: {
+      extra_packages: ['libpam-runtime', 'libpam-sss', 'libnss-sss'],
       manage_oddjobd: false,
       facts_hash: {
-        osfamily: 'Debian',
-        operatingsystem: 'Debian',
-        operatingsystemrelease: '9.0',
-        operatingsystemmajrelease: '9',
         os: {
-          'family' => 'Debian',
-          'release' => {
-            'major' => '9',
-          },
+          family: 'Debian',
+          name: 'Debian',
+          release: { major: '9' }
         },
-      },
+        networking: { domain: 'example.com' }
+      }
     },
-    'el6' => {
-      extra_packages: [
-        'authconfig',
-        'oddjob-mkhomedir',
-      ],
+    el6: {
+      extra_packages: ['authconfig', 'oddjob-mkhomedir'],
       service_dependencies: ['messagebus'],
       manage_oddjobd: true,
       facts_hash: {
-        osfamily: 'RedHat',
-        operatingsystem: 'RedHat',
-        operatingsystemmajrelease: '6',
         os: {
-          'family' => 'RedHat',
-          'name'   => 'RedHat',
-          'release' => {
-            'major' => '6',
-          },
+          family: 'RedHat',
+          name: 'RedHat',
+          release: { major: '6' }
         },
-      },
+        networking: { domain: 'example.com' }
+      }
     },
-    'el7' => {
-      extra_packages: [
-        'authconfig',
-        'oddjob-mkhomedir',
-      ],
+    el7: {
+      extra_packages: ['authconfig', 'oddjob-mkhomedir'],
       manage_oddjobd: true,
       facts_hash: {
-        osfamily: 'RedHat',
-        operatingsystem: 'RedHat',
-        operatingsystemmajrelease: '7',
         os: {
-          'family' => 'RedHat',
-          'name'   => 'RedHat',
-          'release' => {
-            'major' => '7',
-          },
+          family: 'RedHat',
+          name: 'RedHat',
+          release: { major: '7' }
         },
-      },
+        networking: { domain: 'example.com' }
+      }
     },
-    'el8' => {
-      extra_packages: [
-        'authselect',
-        'oddjob-mkhomedir',
-      ],
+    el8: {
+      extra_packages: ['authselect', 'oddjob-mkhomedir'],
       manage_oddjobd: true,
       facts_hash: {
-        osfamily: 'RedHat',
-        operatingsystem: 'RedHat',
-        operatingsystemmajrelease: '8',
         os: {
-          'family' => 'RedHat',
-          'name'   => 'RedHat',
-          'release' => {
-            'major' => '8',
-          },
+          family: 'RedHat',
+          name: 'RedHat',
+          release: { major: '8' }
         },
-      },
+        networking: { domain: 'example.com' }
+      }
     },
-    'el9' => {
-      extra_packages: [
-        'authselect',
-        'oddjob-mkhomedir',
-      ],
+    el9: {
+      extra_packages: ['authselect', 'oddjob-mkhomedir'],
       manage_oddjobd: true,
       facts_hash: {
-        osfamily: 'RedHat',
-        operatingsystem: 'RedHat',
-        operatingsystemmajrelease: '9',
         os: {
-          'family' => 'RedHat',
-          'name'   => 'RedHat',
-          'release' => {
-            'major' => '9',
-          },
+          family: 'RedHat',
+          name: 'RedHat',
+          release: { major: '9' }
         },
-      },
+        networking: { domain: 'example.com' }
+      }
     },
-    'Fedora 30' => {
-      extra_packages: [
-        'authselect',
-        'oddjob-mkhomedir',
-      ],
+    Fedora30: {
+      extra_packages: ['authselect', 'oddjob-mkhomedir'],
       manage_oddjobd: true,
       facts_hash: {
-        osfamily: 'RedHat',
-        operatingsystem: 'Fedora',
-        operatingsystemmajrelease: '30',
         os: {
-          'family' => 'RedHat',
-          'name'   => 'Fedora',
-          'release' => {
-            'major' => '30',
-          },
+          family: 'RedHat',
+          name: 'Fedora',
+          release: { major: '30' }
         },
-      },
+        networking: { domain: 'example.com' }
+      }
     },
-    'Fedora 31' => {
-      extra_packages: [
-        'authselect',
-        'oddjob-mkhomedir',
-      ],
+    Fedora31: {
+      extra_packages: ['authselect', 'oddjob-mkhomedir'],
       manage_oddjobd: true,
       facts_hash: {
-        osfamily: 'RedHat',
-        operatingsystem: 'Fedora',
-        operatingsystemmajrelease: '31',
         os: {
-          'family' => 'RedHat',
-          'name'   => 'Fedora',
-          'release' => {
-            'major' => '31',
-          },
+          family: 'RedHat',
+          name: 'Fedora',
+          release: { major: '31' }
         },
-      },
+        networking: { domain: 'example.com' }
+      }
     },
-    'Fedora 32' => {
-      extra_packages: [
-        'authselect',
-        'oddjob-mkhomedir',
-      ],
+    Fedora32: {
+      extra_packages: ['authselect', 'oddjob-mkhomedir'],
       manage_oddjobd: true,
       facts_hash: {
-        osfamily: 'RedHat',
-        operatingsystem: 'Fedora',
-        operatingsystemmajrelease: '32',
         os: {
-          'family' => 'RedHat',
-          'name'   => 'Fedora',
-          'release' => {
-            'major' => '32',
-          },
+          family: 'RedHat',
+          name: 'Fedora',
+          release: { major: '32' }
         },
-      },
+        networking: { domain: 'example.com' }
+      }
     },
-    'Fedora 33' => {
-      extra_packages: [
-        'authselect',
-        'oddjob-mkhomedir',
-      ],
+    Fedora33: {
+      extra_packages: ['authselect', 'oddjob-mkhomedir'],
       manage_oddjobd: true,
       facts_hash: {
-        osfamily: 'RedHat',
-        operatingsystem: 'Fedora',
-        operatingsystemmajrelease: '33',
         os: {
-          'family' => 'RedHat',
-          'name'   => 'Fedora',
-          'release' => {
-            'major' => '33',
-          },
+          family: 'RedHat',
+          name: 'Fedora',
+          release: { major: '33' }
         },
-      },
+        networking: { domain: 'example.com' }
+      }
     },
-    'gentoo4' => {
+    gentoo4: {
       manage_oddjobd: false,
       facts_hash: {
-        osfamily: 'Gentoo',
-        operatingsystem: 'Gentoo',
-        operatingsystemrelease: '4.14.4-gentoo',
-        operatingsystemmajrelease: '4',
         os: {
-          'family' => 'Gentoo',
-          'release' => {
-            'major' => '4',
-            'minor' => '14',
-          },
+          family: 'Gentoo',
+          name: 'Gentoo',
+          release: { major: '4', minor: '14' }
         },
-      },
+        networking: { domain: 'example.com' }
+      }
     },
-    'suse11_3_i386' => {
-      extra_packages: [
-        'sssd-tools',
-      ],
+    suse11_3_i386: {
+      extra_packages: ['sssd-tools'],
       facts_hash: {
-        osfamily: 'Suse',
-        operatingsystem: 'SLES',
-        operatingsystemrelease: '11.3',
-        operatingsystemmajrelease: '11',
         os: {
-          'family'       => 'Suse',
-          'architecture' => 'i386',
-          'release' => {
-            'major' => '11',
-            'minor' => '3',
-          },
+          family: 'Suse',
+          name: 'SLES',
+          release: { major: '11', minor: '3' },
+          architecture: 'i386'
         },
-      },
+        networking: { domain: 'example.com' }
+      }
     },
-    'suse11_4_i386' => {
-      extra_packages: [
-        'sssd-tools',
-      ],
+    suse11_4_i386: {
+      extra_packages: ['sssd-tools'],
       facts_hash: {
-        osfamily: 'Suse',
-        operatingsystem: 'SLES',
-        operatingsystemrelease: '11.4',
-        operatingsystemmajrelease: '11',
         os: {
-          'family'       => 'Suse',
-          'architecture' => 'i386',
-          'release' => {
-            'major' => '11',
-            'minor' => '4',
-          },
+          family: 'Suse',
+          name: 'SLES',
+          release: { major: '11', minor: '4' },
+          architecture: 'i386'
         },
-      },
+        networking: { domain: 'example.com' }
+      }
     },
-    'suse12_i386' => {
-      extra_packages: [
-        'sssd-krb5',
-        'sssd-ad',
-        'sssd-ipa',
-        'sssd-tools',
-        'sssd-ldap',
-      ],
+    suse12_i386: {
+      extra_packages: ['sssd-krb5', 'sssd-ad', 'sssd-ipa', 'sssd-tools', 'sssd-ldap'],
       facts_hash: {
-        osfamily: 'Suse',
-        operatingsystem: 'SLES',
-        operatingsystemrelease: '12.1',
-        operatingsystemmajrelease: '12',
         os: {
-          'family'       => 'Suse',
-          'architecture' => 'i386',
-          'release' => {
-            'major' => '12',
-          },
+          family: 'Suse',
+          name: 'SLES',
+          release: { major: '12', minor: '1' },
+          architecture: 'i386'
         },
-      },
+        networking: { domain: 'example.com' }
+      }
     },
-    'suse11_3' => {
-      extra_packages: [
-        'sssd-32bit',
-        'sssd-tools',
-      ],
+    suse11_3: {
+      extra_packages: ['sssd-32bit', 'sssd-tools'],
       facts_hash: {
-        osfamily: 'Suse',
-        operatingsystem: 'SLES',
-        operatingsystemrelease: '11.3',
-        operatingsystemmajrelease: '11',
         os: {
-          'family'       => 'Suse',
-          'architecture' => 'x86_64',
-          'release' => {
-            'major' => '11',
-            'minor' => '3',
-          },
+          family: 'Suse',
+          name: 'SLES',
+          release: { major: '11', minor: '3' },
+          architecture: 'x86_64'
         },
-      },
+        networking: { domain: 'example.com' }
+      }
     },
-    'suse11_4' => {
-      extra_packages: [
-        'sssd-32bit',
-        'sssd-tools',
-      ],
+    suse11_4: {
+      extra_packages: ['sssd-32bit', 'sssd-tools'],
       facts_hash: {
-        osfamily: 'Suse',
-        operatingsystem: 'SLES',
-        operatingsystemrelease: '11.4',
-        operatingsystemmajrelease: '11',
         os: {
-          'family'       => 'Suse',
-          'architecture' => 'x86_64',
-          'release' => {
-            'major' => '11',
-            'minor' => '4',
-          },
+          family: 'Suse',
+          name: 'SLES',
+          release: { major: '11', minor: '4' },
+          architecture: 'x86_64'
         },
-      },
+        networking: { domain: 'example.com' }
+      }
     },
-    'suse12' => {
-      extra_packages: [
-        'sssd-krb5',
-        'sssd-ad',
-        'sssd-ipa',
-        'sssd-32bit',
-        'sssd-tools',
-        'sssd-ldap',
-      ],
+    suse12: {
+      extra_packages: ['sssd-krb5', 'sssd-ad', 'sssd-ipa', 'sssd-32bit', 'sssd-tools', 'sssd-ldap'],
       facts_hash: {
-        osfamily: 'Suse',
-        operatingsystem: 'SLES',
-        operatingsystemrelease: '12.1',
-        operatingsystemmajrelease: '12',
         os: {
-          'family'       => 'Suse',
-          'architecture' => 'x86_64',
-          'release' => {
-            'major' => '12',
-          },
+          family: 'Suse',
+          name: 'SLES',
+          release: { major: '12' },
+          architecture: 'x86_64'
         },
-      },
+        networking: { domain: 'example.com' }
+      }
     },
-    'suse15' => {
-      extra_packages: [
-        'sssd-krb5',
-        'sssd-ad',
-        'sssd-ipa',
-        'sssd-32bit',
-        'sssd-tools',
-        'sssd-ldap',
-      ],
+    suse15: {
+      extra_packages: ['sssd-krb5', 'sssd-ad', 'sssd-ipa', 'sssd-32bit', 'sssd-tools', 'sssd-ldap'],
       facts_hash: {
-        osfamily: 'Suse',
-        operatingsystem: 'SLES',
-        operatingsystemrelease: '15.3',
-        operatingsystemmajrelease: '15.3',
         os: {
-          'family'       => 'Suse',
-          'architecture' => 'x86_64',
-          'release' => {
-            'major' => '15',
-          },
+          family: 'Suse',
+          name: 'SLES',
+          release: { major: '15', minor: '3' },
+          architecture: 'x86_64'
         },
-      },
+        networking: { domain: 'example.com' }
+      }
     },
-    'ubuntu14_04' => {
-      extra_packages: [
-        'libpam-runtime',
-        'libpam-sss',
-        'libnss-sss',
-      ],
+    ubuntu14_04: {
+      extra_packages: ['libpam-runtime', 'libpam-sss', 'libnss-sss'],
       facts_hash: {
-        osfamily: 'Debian',
-        operatingsystem: 'Ubuntu',
-        operatingsystemrelease: '14.04',
-        operatingsystemmajrelease: '14.04',
         os: {
-          'family' => 'Debian',
-          'release' => {
-            'major' => '14.04',
-          },
+          family: 'Debian',
+          name: 'Ubuntu',
+          release: { major: '14', minor: '04' }
         },
-      },
+        networking: { domain: 'example.com' }
+      }
     },
-    'ubuntu16_04' => {
-      extra_packages: [
-        'libpam-runtime',
-        'libpam-sss',
-        'libnss-sss',
-      ],
+    ubuntu16_04: {
+      extra_packages: ['libpam-runtime', 'libpam-sss', 'libnss-sss'],
       facts_hash: {
-        osfamily: 'Debian',
-        operatingsystem: 'Ubuntu',
-        operatingsystemrelease: '16.04',
-        operatingsystemmajrelease: '16.04',
         os: {
-          'family' => 'Debian',
-          'release' => {
-            'major' => '16.04',
-          },
+          family: 'Debian',
+          name: 'Ubuntu',
+          release: { major: '16', minor: '04' }
         },
-      },
+        networking: { domain: 'example.com' }
+      }
     },
-    'ubuntu18_04' => {
-      extra_packages: [
-        'libpam-runtime',
-        'libpam-sss',
-        'libnss-sss',
-      ],
+    ubuntu18_04: {
+      extra_packages: ['libpam-runtime', 'libpam-sss', 'libnss-sss'],
       facts_hash: {
-        osfamily: 'Debian',
-        operatingsystem: 'Ubuntu',
-        operatingsystemrelease: '18.04',
-        operatingsystemmajrelease: '18.04',
         os: {
-          'family' => 'Debian',
-          'release' => {
-            'major' => '18.04',
-          },
+          family: 'Debian',
+          name: 'Ubuntu',
+          release: { major: '18', minor: '04' }
         },
-      },
-    },
+        networking: { domain: 'example.com' }
+      }
+    }
   }
+
 
   describe 'with default values for parameters on' do
     platforms.sort.each do |k, v|
@@ -441,12 +272,16 @@ describe 'sssd' do
           v[:facts_hash]
         end
 
+        before do
+          puts "VALUES FOR #{k}: #{v}"
+        end
+
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_class('sssd') }
 
         it do
           is_expected.to contain_package('sssd').with({
-                                                        ensure: 'present',
+                                                        ensure: 'installed',
                                                       })
         end
         it do
@@ -457,7 +292,7 @@ describe 'sssd' do
           v[:extra_packages].each do |pkg|
             it do
               is_expected.to contain_package(pkg).with({
-                                                         ensure: 'present',
+                                                         ensure: 'installed',
                                                        })
             end
             it do
@@ -476,7 +311,7 @@ describe 'sssd' do
           v[:service_dependencies].each do |svc|
             it do
               is_expected.to contain_service(svc).with({
-                                                         ensure: 'running',
+                ensure: 'running',
                 hasstatus: true,
                 hasrestart: true,
                 enable: true,
@@ -489,7 +324,7 @@ describe 'sssd' do
         if v[:manage_oddjobd] == true
           it do
             is_expected.to contain_service('oddjobd').with({
-                                                             ensure: 'running',
+              ensure: 'running',
               enable: true,
               hasstatus: true,
               hasrestart: true,
@@ -508,7 +343,7 @@ describe 'sssd' do
 
         it do
           is_expected.to contain_file('sssd.conf').with({
-                                                          ensure: 'file',
+            ensure: 'file',
             path: '/etc/sssd/sssd.conf',
             owner: 'root',
             group: 'root',
@@ -517,40 +352,40 @@ describe 'sssd' do
                                                         })
         end
 
-        if v[:facts_hash][:os]['name'] == 'RedHat' and v[:facts_hash][:os]['release']['major'] < '8'
+        if v[:facts_hash][:os][:name] == 'RedHat' and v[:facts_hash][:os][:release][:major] < '8'
           it do
             is_expected.to contain_exec('authconfig-mkhomedir').with({
-                                                                       command: '/usr/sbin/authconfig --enablesssd --enablesssdauth --enablemkhomedir --update',
+              command: '/usr/sbin/authconfig --enablesssd --enablesssdauth --enablemkhomedir --update',
               unless: '/usr/bin/test "`/usr/sbin/authconfig --enablesssd --enablesssdauth --enablemkhomedir --test`" = "`/usr/sbin/authconfig --test`"',
               require: 'File[sssd.conf]',
                                                                      })
           end
         end
 
-        if v[:facts_hash][:os]['name'] == 'RedHat' and v[:facts_hash][:os]['release']['major'] >= '8'
+        if v[:facts_hash][:os][:name] == 'RedHat' and v[:facts_hash][:os][:release][:major] >= '8'
           it do
             is_expected.to contain_exec('authselect-mkhomedir').with({
-                                                                       command: '/bin/authselect select sssd with-mkhomedir --force',
+              command: '/bin/authselect select sssd with-mkhomedir --force',
               unless: '/usr/bin/test "`/bin/authselect current --raw`" = "sssd with-mkhomedir"',
               require: 'File[sssd.conf]',
                                                                      })
           end
         end
 
-        if v[:facts_hash][:os]['name'] == 'Fedora'
+        if v[:facts_hash][:os][:name] == 'Fedora'
           it do
             is_expected.to contain_exec('authselect-mkhomedir').with({
-                                                                       command: '/bin/authselect select sssd with-mkhomedir --force',
+              command: '/bin/authselect select sssd with-mkhomedir --force',
               unless: '/usr/bin/test "`/bin/authselect current --raw`" = "sssd with-mkhomedir"',
               require: 'File[sssd.conf]',
                                                                      })
           end
         end
 
-        if v[:facts_hash][:osfamily] == 'Debian'
+        if v[:facts_hash][:os][:family] == 'Debian'
           it do
             is_expected.to contain_file('/usr/share/pam-configs/pam_mkhomedir').with({
-                                                                                       ensure: 'file',
+              ensure: 'file',
               owner: 'root',
               group: 'root',
               mode: '0644',
@@ -561,34 +396,34 @@ describe 'sssd' do
 
           it do
             is_expected.to contain_exec('pam-auth-update').with({
-                                                                  path: '/bin:/usr/bin:/sbin:/usr/sbin',
+              path: '/bin:/usr/bin:/sbin:/usr/sbin',
               refreshonly: true,
                                                                 })
           end
         end
 
-        if v[:facts_hash][:osfamily] == 'Suse'
+        if v[:facts_hash][:os][:family] == 'Suse'
 
-          if v[:facts_hash][:os]['architecture'] == 'i386'
+          if v[:facts_hash][:os][:architecture] == 'i386'
             it do
-              is_expected.not_to contain_package('sssd-32bit').with_ensure('present')
+              is_expected.not_to contain_package('sssd-32bit').with_ensure('installed')
             end
           else
             it do
-              is_expected.to contain_package('sssd-32bit').with_ensure('present')
+              is_expected.to contain_package('sssd-32bit').with_ensure('installed')
             end
           end
 
           it do
             is_expected.to contain_exec('pam-config -a --mkhomedir').with({
-                                                                            path: '/bin:/usr/bin:/sbin:/usr/sbin',
+              path: '/bin:/usr/bin:/sbin:/usr/sbin',
               unless: '/usr/sbin/pam-config -q --mkhomedir | grep session:',
                                                                           })
           end
 
           it do
             is_expected.to contain_exec('pam-config -a --mkhomedir-umask=0022').with({
-                                                                                       path: '/bin:/usr/bin:/sbin:/usr/sbin',
+              path: '/bin:/usr/bin:/sbin:/usr/sbin',
               unless: '/usr/sbin/pam-config -q --mkhomedir | grep umask=0022',
                                                                                      })
           end
@@ -615,15 +450,22 @@ describe 'sssd' do
   end
 
   describe 'with ensure set to valid string absent' do
-    let(:params) { { ensure: 'absent' } }
+    platforms.sort.each do |k, v|
+      context "#{k}" do
+        let(:facts) do
+          v[:facts_hash]
+        end
+        let(:params) { { ensure: 'absent' } }
 
-    it { is_expected.to contain_file('sssd.conf').with_ensure('absent') }
+        it { is_expected.to contain_file('sssd.conf').with_ensure('absent') }
 
-    it do
-      is_expected.to contain_exec('authconfig-mkhomedir').with({
-                                                                 command: '/usr/sbin/authconfig --disablesssd --disablesssdauth --update',
-        unless: '/usr/bin/test "`/usr/sbin/authconfig --disablesssd --disablesssdauth --test`" = "`/usr/sbin/authconfig --test`"',
-                                                               })
+        it do
+          is_expected.not_to contain_exec('authconfig-mkhomedir').with({
+            command: '/usr/sbin/authconfig --disablesssd --disablesssdauth --update',
+            unless: '/usr/bin/test "`/usr/sbin/authconfig --disablesssd --disablesssdauth --test`" = "`/usr/sbin/authconfig --test`"',
+                                                                   })
+        end
+      end
     end
   end
 
@@ -687,7 +529,7 @@ describe 'sssd' do
           v[:facts_hash]
         end
 
-        if v[:facts_hash][:os]['name'] == 'RedHat' and v[:facts_hash][:os]['release']['major'] < '8'
+        if v[:facts_hash][:os][:name] == 'RedHat' and v[:facts_hash][:os][:release][:major] < '8'
           it do
             is_expected.to contain_exec('authconfig-mkhomedir').with({
                                                                        command: '/usr/sbin/authconfig --enablesssd --enablesssdauth --disablemkhomedir --update',
@@ -696,7 +538,7 @@ describe 'sssd' do
           end
         end
 
-        if v[:facts_hash][:os]['name'] == 'RedHat' and v[:facts_hash][:os]['release']['major'] >= '8'
+        if v[:facts_hash][:os][:name] == 'RedHat' and v[:facts_hash][:os][:release][:major] >= '8'
           it do
             is_expected.to contain_exec('authselect-mkhomedir').with({
                                                                        command: '/bin/authselect select sssd --force',
@@ -705,7 +547,7 @@ describe 'sssd' do
           end
         end
 
-        if v[:facts_hash][:os]['name'] == 'Fedora'
+        if v[:facts_hash][:os][:name] == 'Fedora'
           it do
             is_expected.to contain_exec('authselect-mkhomedir').with({
                                                                        command: '/bin/authselect select sssd --force',
@@ -714,11 +556,11 @@ describe 'sssd' do
           end
         end
 
-        if v[:facts_hash][:osfamily] == 'Debian'
+        if v[:facts_hash][:os][:family] == 'Debian'
           it { is_expected.not_to contain_file('/usr/share/pam-configs/pam_mkhomedir') }
         end
 
-        if v[:facts_hash][:osfamily] == 'Suse'
+        if v[:facts_hash][:os][:family] == 'Suse'
           it { is_expected.not_to contain_exec('pam-config -a --mkhomedir') }
         end
       end
@@ -785,7 +627,7 @@ describe 'sssd' do
           v[:facts_hash]
         end
 
-        if v[:facts_hash][:os]['name'] == 'RedHat' and v[:facts_hash][:os]['release']['major'] < '8'
+        if v[:facts_hash][:os][:name] == 'RedHat' and v[:facts_hash][:os][:release][:major] < '8'
           it do
             is_expected.to contain_exec('authconfig-mkhomedir').with({
                                                                        command: '/usr/sbin/authconfig --enable1 --enable2 --update',
@@ -793,7 +635,7 @@ describe 'sssd' do
                                                                      })
           end
         end
-        if v[:facts_hash][:os]['name'] == 'Fedora'
+        if v[:facts_hash][:os][:name] == 'Fedora'
           it do
             is_expected.to contain_exec('authselect-mkhomedir').with({
                                                                        command: '/bin/authselect select profile --enable1 --enable2 --force',
@@ -802,7 +644,7 @@ describe 'sssd' do
           end
         end
 
-        if v[:facts_hash][:os]['name'] == 'RedHat' and v[:facts_hash][:os]['release']['major'] >= '8'
+        if v[:facts_hash][:os][:name] == 'RedHat' and v[:facts_hash][:os][:release][:major] >= '8'
           it do
             is_expected.to contain_exec('authselect-mkhomedir').with({
                                                                        command: '/bin/authselect select profile --enable1 --enable2 --force',
@@ -823,7 +665,7 @@ describe 'sssd' do
           v[:facts_hash]
         end
 
-        if v[:facts_hash][:os]['name'] == 'RedHat' and v[:facts_hash][:os]['release']['major'] < '8'
+        if v[:facts_hash][:os][:name] == 'RedHat' and v[:facts_hash][:os][:release][:major] < '8'
           it do
             is_expected.to contain_exec('authconfig-mkhomedir').with({
                                                                        command: '/usr/sbin/authconfig --disable1 --disable2 --update',
@@ -831,7 +673,7 @@ describe 'sssd' do
                                                                      })
           end
         end
-        if v[:facts_hash][:os]['name'] == 'Fedora'
+        if v[:facts_hash][:os][:name] == 'Fedora'
           it do
             is_expected.to contain_exec('authselect-mkhomedir').with({
                                                                        command: '/bin/authselect select profile --disable1 --disable2 --force',
@@ -840,7 +682,7 @@ describe 'sssd' do
           end
         end
 
-        if v[:facts_hash][:os]['name'] == 'RedHat' and v[:facts_hash][:os]['release']['major'] >= '8'
+        if v[:facts_hash][:os][:name] == 'RedHat' and v[:facts_hash][:os][:release][:major] >= '8'
           it do
             is_expected.to contain_exec('authselect-mkhomedir').with({
                                                                        command: '/bin/authselect select profile --disable1 --disable2 --force',
@@ -861,7 +703,7 @@ describe 'sssd' do
           v[:facts_hash]
         end
 
-        if v[:facts_hash][:os]['name'] == 'RedHat' and v[:facts_hash][:os]['release']['major'] < '8'
+        if v[:facts_hash][:os][:name] == 'RedHat' and v[:facts_hash][:os][:release][:major] < '8'
           it do
             is_expected.to contain_exec('authconfig-mkhomedir').with({
                                                                        command: '/usr/sbin/authconfig --absent1 --absent2 --update',
@@ -882,7 +724,7 @@ describe 'sssd' do
           v[:facts_hash]
         end
 
-        if v[:facts_hash][:osfamily] == 'Debian'
+        if v[:facts_hash][:os][:family] == 'Debian'
           it do
             is_expected.to contain_file('/usr/share/pam-configs/pam_mkhomedir').with({
                                                                                        ensure: 'file',
@@ -895,7 +737,7 @@ describe 'sssd' do
           end
         end
 
-        if v[:facts_hash][:osfamily] == 'Suse'
+        if v[:facts_hash][:os][:family] == 'Suse'
           it do
             is_expected.to contain_exec('pam-config -a --mkhomedir-umask=0077').with({
                                                                                        path: '/bin:/usr/bin:/sbin:/usr/sbin',

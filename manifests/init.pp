@@ -52,11 +52,11 @@ class sssd (
   Enum['present', 'absent'] $ensure = 'present',
   Hash $config = {
     'sssd'               => {
-      'domains'             => $::domain,
+      'domains'             => $facts['networking']['domain'],
       'config_file_version' => 2,
       'services'            => ['nss', 'pam'],
     },
-    "domain/${::domain}" => {
+    "domain/${facts['networking']['domain']}" => {
       'access_provider'    => 'simple',
       'simple_allow_users' => ['root'],
     },
@@ -91,41 +91,41 @@ class sssd (
 ) {
 
   # Warn on unsupported platforms
-  if ($::facts['os']['family'] == 'RedHat') {
-    if ($::facts['os']['name'] == 'Amazon') {
-      if !($::facts['os']['release']['major'] in ['2']) {
-        warning("osname Amazon's os.release.major is <${::facts['os']['release']['major']}> and must be 2.")
+  if ($facts['os']['family'] == 'RedHat') {
+    if ($facts['os']['name'] == 'Amazon') {
+      if !($facts['os']['release']['major'] in ['2']) {
+        warning("osname Amazon's os.release.major is <${facts['os']['release']['major']}> and must be 2.")
       }
-    } elsif ($::facts['os']['name'] in ['RedHat', 'CentOS']) {
-      if !($::facts['os']['release']['major'] in ['6', '7', '8', '9']) {
-        warning("osname RedHat's os.release.major is <${::facts['os']['release']['major']}> and must be 6, 7, 8 or 9.")
+    } elsif ($facts['os']['name'] in ['RedHat', 'CentOS']) {
+      if !($facts['os']['release']['major'] in ['6', '7', '8', '9']) {
+        warning("osname RedHat's os.release.major is <${facts['os']['release']['major']}> and must be 6, 7, 8 or 9.")
       }
-    } elsif ($::facts['os']['name'] == 'Fedora') {
-      if !($::facts['os']['release']['major'] in ['30', '31', '32', '33']) {
-        warning("osname Fedora's os.release.major is <${::facts['os']['release']['major']}> and must be 29, 30, 31, 32 or 33.")
+    } elsif ($facts['os']['name'] == 'Fedora') {
+      if !($facts['os']['release']['major'] in ['30', '31', '32', '33']) {
+        warning("osname Fedora's os.release.major is <${facts['os']['release']['major']}> and must be 29, 30, 31, 32 or 33.")
       }
     } else {
-      warning("osname, \"${::facts['os']['name']}\", is recongnized as part of the RedHat family but is unsupported")
+      warning("osname, \"${facts['os']['name']}\", is recongnized as part of the RedHat family but is unsupported")
     }
   }
 
-  if $::facts['os']['family'] == 'Suse' {
-    if !($::facts['os']['release']['major'] in ['11', '12', '15']) {
-      warning("osfamily Suse's os.release.major is <${::facts['os']['release']['major']}> and must be 11, 12 or 15.")
+  if $facts['os']['family'] == 'Suse' {
+    if !($facts['os']['release']['major'] in ['11', '12', '15']) {
+      warning("osfamily Suse's os.release.major is <${facts['os']['release']['major']}> and must be 11, 12 or 15.")
     }
-    if ($::facts['os']['release']['major'] == '11') and !($::facts['os']['release']['minor'] in ['3', '4']) {
-      warning("Suse 11's os.release.minor is <${::facts['os']['release']['minor']}> and must be 3 or 4.")
+    if ($facts['os']['release']['major'] == '11') and !($facts['os']['release']['minor'] in ['3', '4']) {
+      warning("Suse 11's os.release.minor is <${facts['os']['release']['minor']}> and must be 3 or 4.")
     }
   }
 
-  if ($::facts['os']['family'] == 'Debian') and !($::facts['os']['release']['major'] in ['8', '9', '14.04', '16.04', '18.04']) {
-    warning("osfamily Debian's os.release.major is <${::facts['os']['release']['major']}> and must be 8 or 9 for Debian and 14.04, 16.04 or 18.04 for Ubuntu.")
+  if ($facts['os']['family'] == 'Debian') and !($facts['os']['release']['major'] in ['8', '9', '14.04', '16.04', '18.04']) {
+    warning("osfamily Debian's os.release.major is <${facts['os']['release']['major']}> and must be 8 or 9 for Debian and 14.04, 16.04 or 18.04 for Ubuntu.")
   }
 
   # Manually set service provider to systemd on Amazon Linux 2
   # which is based off el7 and includes systemd.
   # See issue PUP-8248 - https://tickets.puppetlabs.com/browse/PUP-8248
-  if ($::facts['os']['name'] == 'Amazon') and ($::facts['os']['release']['major'] == '2') {
+  if ($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] == '2') {
     $service_provider = 'systemd'
   } else {
     $service_provider = undef
@@ -197,10 +197,10 @@ class sssd (
     content => template($config_template),
   }
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat': {
-      if ($::facts['os']['name'] == 'Fedora' and versioncmp($::facts['os']['release']['major'], '28') >= 0) or
-      ( $::facts['os']['family'] == 'RedHat' and versioncmp($::facts['os']['release']['major'], '8') >= 0) or ( $::facts['os']['family'] == 'RedHat' and versioncmp($::facts['os']['release']['major'], '9') >= 0) {
+      if ($facts['os']['name'] == 'Fedora' and versioncmp($facts['os']['release']['major'], '28') >= 0) or
+      ( $facts['os']['family'] == 'RedHat' and versioncmp($facts['os']['release']['major'], '8') >= 0) or ( $facts['os']['family'] == 'RedHat' and versioncmp($facts['os']['release']['major'], '9') >= 0) {
         if $ensure == 'present' {
           $authselect_options = join(
             concat(
@@ -241,10 +241,12 @@ class sssd (
         $authconfig_test_cmd   = "/usr/sbin/authconfig ${authconfig_flags} --test"
         $authconfig_check_cmd  = "/usr/bin/test \"`${authconfig_test_cmd}`\" = \"`/usr/sbin/authconfig --test`\""
 
-        exec { 'authconfig-mkhomedir':
-          command => $authconfig_update_cmd,
-          unless  => $authconfig_check_cmd,
-          require => File['sssd.conf'],
+        if $ensure != 'absent' {
+          exec { 'authconfig-mkhomedir':
+            command => $authconfig_update_cmd,
+            unless  => $authconfig_check_cmd,
+            require => File['sssd.conf'],
+          }
         }
       }
     }
