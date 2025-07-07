@@ -10,7 +10,11 @@ describe 'sssd' do
           name: 'Amazon',
           release: { major: '2' }
         },
-        networking: { domain: 'example.com' }
+        networking: {
+          domain: 'example.com',
+          ip: '172.16.254.254',
+          fqdn: 'foo.internal.com'
+        }
       }
     },
     debian8: {
@@ -22,7 +26,11 @@ describe 'sssd' do
           name: 'Debian',
           release: { major: '8' }
         },
-        networking: { domain: 'example.com' }
+        networking: {
+          domain: 'example.com',
+          ip: '172.16.254.254',
+          fqdn: 'foo.internal.com'
+        }
       }
     },
     debian9: {
@@ -34,7 +42,11 @@ describe 'sssd' do
           name: 'Debian',
           release: { major: '9' }
         },
-        networking: { domain: 'example.com' }
+        networking: {
+          domain: 'example.com',
+          ip: '172.16.254.254',
+          fqdn: 'foo.internal.com'
+        }
       }
     },
     el6: {
@@ -47,7 +59,11 @@ describe 'sssd' do
           name: 'RedHat',
           release: { major: '6' }
         },
-        networking: { domain: 'example.com' }
+        networking: {
+          domain: 'example.com',
+          ip: '172.16.254.254',
+          fqdn: 'foo.internal.com'
+        }
       }
     },
     el7: {
@@ -59,7 +75,11 @@ describe 'sssd' do
           name: 'RedHat',
           release: { major: '7' }
         },
-        networking: { domain: 'example.com' }
+        networking: {
+          domain: 'example.com',
+          ip: '172.16.254.254',
+          fqdn: 'foo.internal.com'
+        }
       }
     },
     el8: {
@@ -71,7 +91,11 @@ describe 'sssd' do
           name: 'RedHat',
           release: { major: '8' }
         },
-        networking: { domain: 'example.com' }
+        networking: {
+          domain: 'example.com',
+          ip: '172.16.254.254',
+          fqdn: 'foo.internal.com'
+        }
       }
     },
     el9: {
@@ -83,7 +107,11 @@ describe 'sssd' do
           name: 'RedHat',
           release: { major: '9' }
         },
-        networking: { domain: 'example.com' }
+        networking: {
+          domain: 'example.com',
+          ip: '172.16.254.254',
+          fqdn: 'foo.internal.com'
+        }
       }
     },
     Fedora30: {
@@ -95,7 +123,11 @@ describe 'sssd' do
           name: 'Fedora',
           release: { major: '30' }
         },
-        networking: { domain: 'example.com' }
+        networking: {
+          domain: 'example.com',
+          ip: '172.16.254.254',
+          fqdn: 'foo.internal.com'
+        }
       }
     },
     Fedora31: {
@@ -107,7 +139,11 @@ describe 'sssd' do
           name: 'Fedora',
           release: { major: '31' }
         },
-        networking: { domain: 'example.com' }
+        networking: {
+          domain: 'example.com',
+          ip: '172.16.254.254',
+          fqdn: 'foo.internal.com'
+        }
       }
     },
     Fedora32: {
@@ -119,7 +155,11 @@ describe 'sssd' do
           name: 'Fedora',
           release: { major: '32' }
         },
-        networking: { domain: 'example.com' }
+        networking: {
+          domain: 'example.com',
+          ip: '172.16.254.254',
+          fqdn: 'foo.internal.com'
+        }
       }
     },
     Fedora33: {
@@ -131,7 +171,11 @@ describe 'sssd' do
           name: 'Fedora',
           release: { major: '33' }
         },
-        networking: { domain: 'example.com' }
+        networking: {
+          domain: 'example.com',
+          ip: '172.16.254.254',
+          fqdn: 'foo.internal.com'
+        }
       }
     },
     gentoo4: {
@@ -143,7 +187,11 @@ describe 'sssd' do
           name: 'Gentoo',
           release: { major: '4', minor: '14' }
         },
-        networking: { domain: 'example.com' }
+        networking: {
+          domain: 'example.com',
+          ip: '172.16.254.254',
+          fqdn: 'foo.internal.com'
+        }
       }
     },
     suse11_3_i386: {
@@ -155,7 +203,11 @@ describe 'sssd' do
           release: { major: '11', minor: '3' },
           architecture: 'i386'
         },
-        networking: { domain: 'example.com' }
+        networking: {
+          domain: 'example.com',
+          ip: '172.16.254.254',
+          fqdn: 'foo.internal.com'
+        }
       }
     },
     suse11_4_i386: {
@@ -167,7 +219,11 @@ describe 'sssd' do
           release: { major: '11', minor: '4' },
           architecture: 'i386'
         },
-        networking: { domain: 'example.com' }
+        networking: {
+          domain: 'example.com',
+          ip: '172.16.254.254',
+          fqdn: 'foo.internal.com'
+        }
       }
     },
     suse12_i386: {
@@ -179,7 +235,11 @@ describe 'sssd' do
           release: { major: '12', minor: '1' },
           architecture: 'i386'
         },
-        networking: { domain: 'example.com' }
+        networking: {
+          domain: 'example.com',
+          ip: '172.16.254.254',
+          fqdn: 'foo.internal.com'
+        }
       }
     },
     suse11_3: {
@@ -191,7 +251,11 @@ describe 'sssd' do
           release: { major: '11', minor: '3' },
           architecture: 'x86_64'
         },
-        networking: { domain: 'example.com' }
+        networking: {
+          domain: 'example.com',
+          ip: '172.16.254.254',
+          fqdn: 'foo.internal.com'
+        }
       }
     },
     suse11_4: {
@@ -203,7 +267,11 @@ describe 'sssd' do
           release: { major: '11', minor: '4' },
           architecture: 'x86_64'
         },
-        networking: { domain: 'example.com' }
+        networking: {
+          domain: 'example.com',
+          ip: '172.16.254.254',
+          fqdn: 'foo.internal.com'
+        }
       }
     },
     suse12: {
@@ -215,7 +283,11 @@ describe 'sssd' do
           release: { major: '12' },
           architecture: 'x86_64'
         },
-        networking: { domain: 'example.com' }
+        networking: {
+          domain: 'example.com',
+          ip: '172.16.254.254',
+          fqdn: 'foo.internal.com'
+        }
       }
     },
     suse15: {
@@ -227,7 +299,11 @@ describe 'sssd' do
           release: { major: '15', minor: '3' },
           architecture: 'x86_64'
         },
-        networking: { domain: 'example.com' }
+        networking: {
+          domain: 'example.com',
+          ip: '172.16.254.254',
+          fqdn: 'foo.internal.com'
+        }
       }
     },
     ubuntu14_04: {
@@ -238,7 +314,11 @@ describe 'sssd' do
           name: 'Ubuntu',
           release: { major: '14', minor: '04' }
         },
-        networking: { domain: 'example.com' }
+        networking: {
+          domain: 'example.com',
+          ip: '172.16.254.254',
+          fqdn: 'foo.internal.com'
+        }
       }
     },
     ubuntu16_04: {
@@ -249,7 +329,11 @@ describe 'sssd' do
           name: 'Ubuntu',
           release: { major: '16', minor: '04' }
         },
-        networking: { domain: 'example.com' }
+        networking: {
+          domain: 'example.com',
+          ip: '172.16.254.254',
+          fqdn: 'foo.internal.com'
+        }
       }
     },
     ubuntu18_04: {
@@ -260,7 +344,11 @@ describe 'sssd' do
           name: 'Ubuntu',
           release: { major: '18', minor: '04' }
         },
-        networking: { domain: 'example.com' }
+        networking: {
+          domain: 'example.com',
+          ip: '172.16.254.254',
+          fqdn: 'foo.internal.com'
+        }
       }
     }
   }
@@ -271,9 +359,10 @@ describe 'sssd' do
         v[:facts_hash]
       end
 
-      before(:each) do
-        puts "VALUES FOR #{k}: #{v}"
-      end
+      # before(:each) do
+      #  puts "VALUES FOR #{k}: #{v}"
+      #  puts "facts[:networking] = #{facts[:networking]}"
+      # end
 
       describe 'with default values for parameters on' do
         it { is_expected.to compile.with_all_deps }
