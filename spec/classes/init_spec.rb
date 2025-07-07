@@ -271,12 +271,11 @@ describe 'sssd' do
         v[:facts_hash]
       end
 
-      before do
+      before(:each) do
         puts "VALUES FOR #{k}: #{v}"
       end
 
       describe 'with default values for parameters on' do
-
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_class('sssd') }
         it do
@@ -308,7 +307,7 @@ describe 'sssd' do
           v[:service_dependencies].each do |svc|
             it do
               is_expected.to contain_service(svc).with({
-                ensure: 'running',
+                                                         ensure: 'running',
                 hasstatus: true,
                 hasrestart: true,
                 enable: true,
@@ -320,7 +319,7 @@ describe 'sssd' do
         if v[:manage_oddjobd] == true
           it do
             is_expected.to contain_service('oddjobd').with({
-              ensure: 'running',
+                                                             ensure: 'running',
               enable: true,
               hasstatus: true,
               hasrestart: true,
@@ -338,7 +337,7 @@ describe 'sssd' do
         end
         it do
           is_expected.to contain_file('sssd.conf').with({
-            ensure: 'file',
+                                                          ensure: 'file',
             path: '/etc/sssd/sssd.conf',
             owner: 'root',
             group: 'root',
@@ -349,7 +348,7 @@ describe 'sssd' do
         if v[:facts_hash][:os][:name] == 'RedHat' and v[:facts_hash][:os][:release][:major] < '8'
           it do
             is_expected.to contain_exec('authconfig-mkhomedir').with({
-              command: '/usr/sbin/authconfig --enablesssd --enablesssdauth --enablemkhomedir --update',
+                                                                       command: '/usr/sbin/authconfig --enablesssd --enablesssdauth --enablemkhomedir --update',
               unless: '/usr/bin/test "`/usr/sbin/authconfig --enablesssd --enablesssdauth --enablemkhomedir --test`" = "`/usr/sbin/authconfig --test`"',
               require: 'File[sssd.conf]',
                                                                      })
@@ -358,7 +357,7 @@ describe 'sssd' do
         if v[:facts_hash][:os][:name] == 'RedHat' and v[:facts_hash][:os][:release][:major] >= '8'
           it do
             is_expected.to contain_exec('authselect-mkhomedir').with({
-              command: '/bin/authselect select sssd with-mkhomedir --force',
+                                                                       command: '/bin/authselect select sssd with-mkhomedir --force',
               unless: '/usr/bin/test "`/bin/authselect current --raw`" = "sssd with-mkhomedir"',
               require: 'File[sssd.conf]',
                                                                      })
@@ -367,7 +366,7 @@ describe 'sssd' do
         if v[:facts_hash][:os][:name] == 'Fedora'
           it do
             is_expected.to contain_exec('authselect-mkhomedir').with({
-              command: '/bin/authselect select sssd with-mkhomedir --force',
+                                                                       command: '/bin/authselect select sssd with-mkhomedir --force',
               unless: '/usr/bin/test "`/bin/authselect current --raw`" = "sssd with-mkhomedir"',
               require: 'File[sssd.conf]',
                                                                      })
@@ -376,7 +375,7 @@ describe 'sssd' do
         if v[:facts_hash][:os][:family] == 'Debian'
           it do
             is_expected.to contain_file('/usr/share/pam-configs/pam_mkhomedir').with({
-              ensure: 'file',
+                                                                                       ensure: 'file',
               owner: 'root',
               group: 'root',
               mode: '0644',
@@ -386,7 +385,7 @@ describe 'sssd' do
           end
           it do
             is_expected.to contain_exec('pam-auth-update').with({
-              path: '/bin:/usr/bin:/sbin:/usr/sbin',
+                                                                  path: '/bin:/usr/bin:/sbin:/usr/sbin',
               refreshonly: true,
                                                                 })
           end
@@ -403,13 +402,13 @@ describe 'sssd' do
           end
           it do
             is_expected.to contain_exec('pam-config -a --mkhomedir').with({
-              path: '/bin:/usr/bin:/sbin:/usr/sbin',
+                                                                            path: '/bin:/usr/bin:/sbin:/usr/sbin',
               unless: '/usr/sbin/pam-config -q --mkhomedir | grep session:',
                                                                           })
           end
           it do
             is_expected.to contain_exec('pam-config -a --mkhomedir-umask=0022').with({
-              path: '/bin:/usr/bin:/sbin:/usr/sbin',
+                                                                                       path: '/bin:/usr/bin:/sbin:/usr/sbin',
               unless: '/usr/sbin/pam-config -q --mkhomedir | grep umask=0022',
                                                                                      })
           end
@@ -437,9 +436,9 @@ describe 'sssd' do
         it { is_expected.to contain_file('sssd.conf').with_ensure('absent') }
         it do
           is_expected.not_to contain_exec('authconfig-mkhomedir').with({
-            command: '/usr/sbin/authconfig --disablesssd --disablesssdauth --update',
+                                                                         command: '/usr/sbin/authconfig --disablesssd --disablesssdauth --update',
             unless: '/usr/bin/test "`/usr/sbin/authconfig --disablesssd --disablesssdauth --test`" = "`/usr/sbin/authconfig --test`"',
-                                                                   })
+                                                                       })
         end
       end
 
@@ -538,6 +537,7 @@ describe 'sssd' do
 
       describe "with manage_oddjobd set to valid boolean false on #{k}" do
         let(:params) { { manage_oddjobd: false } }
+
         if v[:service_dependencies]
           v[:service_dependencies].each do |svc|
             it { is_expected.to contain_service(svc).with_before(nil) }
@@ -548,6 +548,7 @@ describe 'sssd' do
 
       describe "with manage_oddjobd set to valid boolean true on #{k}" do
         let(:params) { { manage_oddjobd: true } }
+
         if v[:service_dependencies]
           v[:service_dependencies].each do |svc|
             it { is_expected.to contain_service(svc).with_before('Service[oddjobd]') }
@@ -564,9 +565,9 @@ describe 'sssd' do
         end
         it do
           is_expected.to contain_service('sssd').with({
-            ensure: 'stopped',
+                                                        ensure: 'stopped',
             enable: false,
-          })
+                                                      })
         end
       end
 
@@ -859,5 +860,4 @@ describe 'sssd' do
       end
     end
   end
-
 end
