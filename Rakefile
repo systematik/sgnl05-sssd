@@ -61,6 +61,8 @@ PuppetLint.configuration.send('disable_manifest_whitespace_two_empty_lines')
 PuppetLint.configuration.send('disable_manifest_whitespace_arrows_single_space_after')
 PuppetLint.configuration.send('disable_manifest_whitespace_class_name_single_space_after')
 PuppetLint.configuration.send('disable_manifest_whitespace_newline_beginning_of_file')
+PuppetLint.configuration.send('disable_trailing_comma')
+PuppetLint.configuration.send('disable_relative_classname_inclusion')
 
 # do not fail job if checks are flagged as warnings
 PuppetLint.configuration.fail_on_warnings = false
